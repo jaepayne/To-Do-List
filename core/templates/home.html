@@ -1,0 +1,74 @@
+<!doctype html>
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>To-Do List</h1>
+<br />
+
+
+<div class="p-2 mb-2 bg-warning bg-opacity-25 rounded-3">
+  <div class="container-fluid py-2">
+    <div class="row">
+      <div style="min-height:75px;" class="col-md-6"><h3>Enter an Item to add it to the list:</h3></div>
+      <div style="min-height:75px;" class="col-md-6 d-none d-md-block">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-primary alert-dismissible" role="alert">
+              <small>{{ message }}</small>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+    </div>
+
+        <!-- _________________input section_________________________ -->
+    <form action="{% url 'home' %}" class="d-flex mb-4" method="POST">
+        {% csrf_token %}
+      <input class="form-control me-2" type="search" placeholder="Enter a New Item..." aria-label="Search" name="item">
+      <button class="btn btn-outline-secondary" type="submit">Add</button>
+    </form>
+    <!-- __________________END input section________________________ -->
+
+    {% if all_items %}
+    <table class="table table-bordered">
+      <!-- <caption style="text-align:center;font-size:larger;caption-side: top;"><strong>A list of Things I need to do.</strong></caption> -->
+      <thead>
+        <tr class="bg-info bg-gradient">
+          <th scope="col" style="text-align: center; vertical-align: text-top;">Item</th>
+          <th scope="col" style="text-align: center; vertical-align: text-top;">Status</th>
+          <th colspan="2" scope="col" style="text-align: center; vertical-align: text-top;">Actions</th>
+        </tr>
+      </thead>
+      {% for things in all_items %}
+        {% if things.completed %}
+        <tbody>
+          <tr class="bg-success bg-gradient bg-opacity-25">
+            <td class="text-left w-50 striker"><strong>{{ things.item }}</strong></td>
+            <td class="text-center"><a href="{% url 'uncross' things.id %}"><strong>Uncross</strong></td>
+            <td class="text-center"><a href="{% url 'edit' things.id %}"><strong>Edit</strong></td>
+            <td class="text-center"><a href="{% url 'delete' things.id %}">Delete</a></td>
+          </tr>
+        </tbody>
+        {% else %}
+        <tbody>
+          <tr class="bg-light">
+            <td class="text-left w-50"><strong>{{ things.item }}</strong></td>
+            <td class="text-center"><a href="{% url 'cross_off' things.id %}"><strong>Cross Off</strong></td>
+              <td class="text-center"><a href="{% url 'edit' things.id %}"><strong>Edit</strong></td>
+            <td class="text-center"><a href="{% url 'delete' things.id %}"><strong>Delete</strong></a></td>
+          </tr>
+        </tbody>
+        {% endif %}
+
+      {% endfor %}
+    </table>
+    {% endif %}
+
+  </div>
+</div>
+<div class="text-center my-2"><a class="btn btn-primary btn-lg" type="button" href="{% url 'about' %}">More Info »</a></div>
+
+{% endblock %}

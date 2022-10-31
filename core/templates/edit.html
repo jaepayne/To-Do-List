@@ -1,0 +1,23 @@
+<!doctype html>
+{% extends 'base.html' %}
+
+
+{% block title %}To-Do List | Edit Item{% endblock %}
+
+{% block content %}
+  <div class="p-2 my-2 bg-warning bg-opacity-25 rounded-3">
+    <div class="container-fluid py-2">
+      <!-- _________________input section_________________________ -->
+      <form class="form-inline w-75 d-flex" method="POST">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="{{ item.item }}" aria-label="Search"
+        value="{{ item.item }}" name="item">
+        <button class="btn btn-outline-secondary" type="submit">Edit Item</button>
+
+        <input type="hidden" value="{{ item.completed }}" name="completed">
+      </form>
+      <!-- __________________END input section________________________ -->
+    </div>
+    <div class="text-center my-2"><a class="btn btn-primary btn-lg" type="button" href="{% url 'home' %}">Cancel</a></div>
+  </div>
+{% endblock %}
